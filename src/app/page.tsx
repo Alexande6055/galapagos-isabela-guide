@@ -6,6 +6,7 @@ import { Play, Pause, RotateCcw, Volume2, VolumeX, MapPin, Info, Map, Headphones
 import { Badge } from "./components/ui/badge";
 import { Button } from "./components/ui/button";
 import { useEffect } from "react";
+import { playAudio } from "./lib/utils";
 
 export default function HomeScreen() {
   const {
@@ -284,7 +285,7 @@ export default function HomeScreen() {
                   size="sm"
                   variant="outline"
                   className="border-slate-600 text-white hover:bg-slate-700 bg-transparent"
-                  onClick={() => speakText(bird.sound)}
+                  onClick={() => playAudio(bird.sound)}
                 >
                   🎵
                 </Button>
