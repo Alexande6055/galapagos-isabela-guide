@@ -26,6 +26,9 @@ export const metadata: Metadata = {
     'viajes',
     'turismo accesible'
   ],
+  icons: {
+    icon: '/images/tortoise.ico',
+  },
   authors: [{ name: 'Alexander Tasinchano' }],
   robots: 'index, follow',
   openGraph: {
@@ -35,7 +38,7 @@ export const metadata: Metadata = {
     siteName: 'Guía Isabela Galápagos',
     images: [
       {
-        url: '/ruta/a/tu/imagen.jpg',
+        url: '/images/turismo.png',
         width: 1200,
         height: 630,
         alt: 'Vista panorámica de Isabela, Galápagos',
