@@ -1,11 +1,21 @@
 import { useState, useRef } from "react"
 import { AudioLocation, BirdSpecies } from "../types"
 import { locations, birdSpecies } from "../data"
-
+export interface Bird {
+  id: string
+  name: string
+  scientificName: string
+  description: string
+  habitat: string
+  bestTime: string
+  image?: string
+  sound?: string
+  audioDescription: string
+}
 export const useGuide = () => {
   const [currentSection, setCurrentSection] = useState<"home" | "info" | "explore" | "audio" | "birds">("home")
   const [selectedLocation, setSelectedLocation] = useState<AudioLocation | null>(null)
-  const [selectedBird, setSelectedBird] = useState<BirdSpecies | null>(null)
+  const [selectedBird, setSelectedBird] = useState<Bird | null>(null)
   const [isPlaying, setIsPlaying] = useState(false)
   const [isMuted, setIsMuted] = useState(false)
   const [autoDescriptionEnabled, setAutoDescriptionEnabled] = useState(true)

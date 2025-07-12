@@ -4,23 +4,14 @@ import { Volume2, Headphones, Play } from "lucide-react"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "./ui/card"
 import { Button } from "./ui/button"
 import { playAudio } from "../lib/utils"
+import { Bird } from "../hooks/useGuide"
+import { BirdSpecies } from "../types"
 
-interface Bird {
-    id: string
-    name: string
-    scientificName: string
-    description: string
-    habitat: string
-    bestTime: string
-    image?: string
-    sound?: string
-    audioDescription?: string
-}
 
 interface BirdsSectionProps {
-    birdSpecies: Bird[]
+    birdSpecies: BirdSpecies[]
     selectedBird: Bird | null
-    handleBirdSelect: (bird: Bird) => void
+    handleBirdSelect: (bird: BirdSpecies) => void
     speakText: (text: string) => void
     getThemeClasses: () => any
     isDarkMode: boolean
