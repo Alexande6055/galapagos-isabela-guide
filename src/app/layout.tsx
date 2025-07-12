@@ -44,6 +44,9 @@ export const metadata: Metadata = {
     locale: 'es_EC',
     type: 'website',
   },
+  other: {
+    'google-site-verification': 'vHIzuFR42_8-BkNGQSs0buGLpfEmZKxiuaPRV2YPXss',
+  },
   metadataBase: new URL('https://isabelaturismoaccesible.pages.dev'),
 }
 
