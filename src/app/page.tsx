@@ -1,12 +1,11 @@
 "use client"
-import Image from "next/image";
 import { useGuide } from "./hooks/useGuide";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "./components/ui/card";
 import { Play, Pause, RotateCcw, Volume2, VolumeX, MapPin, Info, Map, Headphones, Sun, Moon, Home } from "lucide-react"
 import { Badge } from "./components/ui/badge";
 import { Button } from "./components/ui/button";
+import BirdsSection from "./components/BirdsSection";
 import { useEffect } from "react";
-import { playAudio } from "./lib/utils";
 
 export default function HomeScreen() {
   const {
@@ -33,7 +32,6 @@ export default function HomeScreen() {
 
   const themeClasses = getThemeClasses()
 
-  // Keyboard navigation
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
       switch (event.key) {
@@ -69,28 +67,28 @@ export default function HomeScreen() {
     return () => window.removeEventListener("keydown", handleKeyDown)
   }, [currentSection, selectedLocation, isPlaying])
 
-  // Actualizar la función renderExplore para usar la imagen del mapa real
   const renderExplore = () => (
-    <div className="space-y-6">
-      <h2 className="text-3xl font-bold text-white mb-6">Explorar Lugares</h2>
+    <div className="space-y-8">
+      <h2 className="text-4xl font-extrabold text-white mb-8 tracking-wide drop-shadow-lg">Explorar Lugares</h2>
 
-      <Card className={`${getThemeClasses().card} mb-6`}>
+      <Card className={`${getThemeClasses().card} mb-8 shadow-xl border border-blue-600/40 hover:shadow-2xl transition-shadow`}>
         <CardContent className="p-6">
-          <div className="relative bg-slate-700 rounded-lg p-4 mb-6">
-            <h3 className={`${getThemeClasses().text} text-lg mb-4 text-center`}>Mapa Oficial de la Isla Isabela</h3>
-            <div className="relative w-full">
+          <div className="relative bg-slate-800 rounded-2xl p-6 mb-8 shadow-lg border border-blue-500/70">
+            <h3 className={`${getThemeClasses().text} text-xl font-semibold mb-6 text-center tracking-wide`}>
+              Mapa Oficial de la Isla Isabela
+            </h3>
+            <div className="relative w-full rounded-lg overflow-hidden shadow-lg border-4 border-blue-600/60">
               <img
                 src="/images/isabela-map.png"
                 alt="Mapa detallado de la Isla Isabela mostrando volcanes, bahías, puntos de interés y actividades disponibles"
-                className="w-full h-auto rounded-lg border-2 border-blue-500/50"
-                style={{ maxHeight: "500px", objectFit: "contain" }}
+                className="w-full h-auto object-contain"
+                style={{ maxHeight: "520px" }}
               />
-              {/* Overlay con puntos interactivos */}
               <div className="absolute inset-0">
                 {locations.map((location) => (
                   <button
                     key={location.id}
-                    className="absolute w-4 h-4 bg-red-500 rounded-full border-2 border-white hover:bg-red-400 focus:ring-2 focus:ring-blue-400 focus:outline-none animate-pulse"
+                    className="absolute w-5 h-5 bg-red-600 rounded-full border-2 border-white hover:bg-red-500 focus:ring-4 focus:ring-red-400 focus:outline-none animate-pulse"
                     style={{
                       left: `${location.coordinates.x}%`,
                       top: `${location.coordinates.y}%`,
@@ -105,55 +103,57 @@ export default function HomeScreen() {
                 ))}
               </div>
             </div>
-            <p className="text-gray-300 text-sm text-center mt-4">
+            <p className="text-blue-200 text-center mt-6 italic tracking-wide select-none">
               Mapa oficial de la Isla Isabela - Haz clic en los puntos rojos para explorar cada ubicación
             </p>
           </div>
         </CardContent>
       </Card>
 
-      <div className="grid gap-4 md:grid-cols-2">
+      <div className="grid gap-6 md:grid-cols-2">
         {locations.map((location) => (
           <Card
             key={location.id}
-            className={`${getThemeClasses().card} ${getThemeClasses().cardHover} transition-colors`}
+            className={`${getThemeClasses().card} ${getThemeClasses().cardHover} transition-transform duration-300 hover:scale-[1.03] shadow-lg`}
           >
             <CardHeader>
-              <CardTitle className={`${getThemeClasses().text} flex items-center gap-2`}>
-                <MapPin className="h-5 w-5" />
+              <CardTitle className={`${getThemeClasses().text} flex items-center gap-3 font-semibold text-lg`}>
+                <MapPin className="h-6 w-6 text-blue-500" />
                 {location.name}
               </CardTitle>
-              <CardDescription className={getThemeClasses().textSecondary}>{location.description}</CardDescription>
+              <CardDescription className={`${getThemeClasses().textSecondary} text-sm font-light`}>
+                {location.description}
+              </CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
               {location.image && (
                 <img
                   src={location.image || "/placeholder.svg"}
                   alt={`Vista del ${location.name}`}
-                  className="w-full h-32 object-cover rounded-lg"
+                  className="w-full h-40 object-cover rounded-xl shadow-md border border-gray-600"
                 />
               )}
               <div>
-                <h4 className={`${getThemeClasses().text} font-medium mb-2`}>Características de accesibilidad:</h4>
-                <div className="flex flex-wrap gap-2">
+                <h4 className={`${getThemeClasses().text} font-semibold mb-3`}>Características de accesibilidad:</h4>
+                <div className="flex flex-wrap gap-3">
                   {location.accessibility.map((feature, index) => (
                     <Badge
                       key={index}
                       variant="secondary"
-                      className={`${isDarkMode ? "bg-blue-900/50 text-blue-200" : "bg-blue-100 text-blue-800"}`}
+                      className={`${isDarkMode ? "bg-blue-900/70 text-blue-300" : "bg-blue-200 text-blue-900"} px-3 py-1 rounded-full font-medium text-sm`}
                     >
                       {feature}
                     </Badge>
                   ))}
                 </div>
               </div>
-              <div className="flex gap-2">
+              <div className="flex gap-3">
                 <Button
                   onClick={() => handleLocationSelect(location)}
-                  className="flex-1 bg-blue-600 hover:bg-blue-700"
+                  className="flex-1 bg-gradient-to-r from-blue-600 to-blue-500 hover:from-blue-700 hover:to-blue-600 shadow-md transition-all"
                   onFocus={() => speakText(`Botón escuchar descripción de ${location.name}`)}
                 >
-                  <Volume2 className="h-4 w-4 mr-2" />
+                  <Volume2 className="h-5 w-5 mr-3" />
                   Escuchar descripción
                 </Button>
               </div>
@@ -164,228 +164,55 @@ export default function HomeScreen() {
     </div>
   )
 
-  // Agregar nueva función para renderizar la sección de aves
-  const renderBirds = () => (
-    <div className="space-y-6">
-      <div className="text-center space-y-4">
-        <h2 className={`${getThemeClasses().text} text-3xl font-bold mb-6`}>Aves de la Isla Isabela</h2>
-        <p className={`${getThemeClasses().textSecondary} text-lg max-w-2xl mx-auto`}>
-          Descubre la increíble diversidad de aves que habitan en la Isla Isabela
-        </p>
-      </div>
-
-      {/* Ave del día - similar al diseño de Merlin */}
-      <Card
-        className={`${getThemeClasses().card} ${isDarkMode ? "bg-gradient-to-br from-slate-800 to-slate-900" : "bg-gradient-to-br from-white to-gray-50"} overflow-hidden`}
-      >
-        <div className="relative">
-          <img
-            src={birdSpecies[0].image || "/placeholder.svg"}
-            alt={`${birdSpecies[0].name} - Ave del día`}
-            className="w-full h-64 object-cover"
-          />
-          <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-6">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-gray-300 text-sm font-medium">AVE DEL DÍA</p>
-                <h3 className={`${getThemeClasses().text} text-2xl font-bold`}>{birdSpecies[0].name}</h3>
-                <p className="text-gray-300 italic">{birdSpecies[0].scientificName}</p>
-              </div>
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={() => handleBirdSelect(birdSpecies[0])}
-                className={`${getThemeClasses().text} hover:bg-white/20`}
-              >
-                <Volume2 className="h-5 w-5" />
-              </Button>
-            </div>
-          </div>
-        </div>
-      </Card>
-
-      {/* Sección de identificación de aves */}
-      <Card className={getThemeClasses().card}>
-        <CardHeader className="text-center">
-          <CardTitle className={`${getThemeClasses().text} text-xl`}>IDENTIFICAR UN AVE</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="grid grid-cols-3 gap-4 mb-6">
-            <div className="text-center">
-              <div className="w-16 h-16 bg-slate-700 rounded-full flex items-center justify-center mx-auto mb-2 hover:bg-slate-600 transition-colors cursor-pointer">
-                <span className="text-white text-2xl">?</span>
-              </div>
-              <p className="text-gray-300 text-sm">Paso a paso</p>
-            </div>
-            <div className="text-center">
-              <div className="w-16 h-16 bg-green-600 rounded-full flex items-center justify-center mx-auto mb-2 hover:bg-green-700 transition-colors cursor-pointer">
-                <Volume2 className="h-6 w-6 text-white" />
-              </div>
-              <p className="text-green-400 text-sm font-medium">Audio ID</p>
-            </div>
-            <div className="text-center">
-              <div className="w-16 h-16 bg-slate-700 rounded-full flex items-center justify-center mx-auto mb-2 hover:bg-slate-600 transition-colors cursor-pointer">
-                <span className="text-white text-xl">📷</span>
-              </div>
-              <p className="text-gray-300 text-sm">Foto ID</p>
-            </div>
-          </div>
-
-          <div className="text-center">
-            <Button
-              variant="outline"
-              className="border-slate-600 text-white hover:bg-slate-700 bg-transparent"
-              onClick={() => speakText("Función de grabaciones de audio disponible próximamente")}
-            >
-              <Volume2 className="h-4 w-4 mr-2" />
-              Mis grabaciones de audio
-            </Button>
-          </div>
-        </CardContent>
-      </Card>
-
-      {/* Lista de aves */}
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-        {birdSpecies.map((bird) => (
-          <Card key={bird.id} className={`${getThemeClasses().card} ${getThemeClasses().cardHover} transition-colors`}>
-            <div className="relative">
-              <img
-                src={bird.image || "/placeholder.svg"}
-                alt={bird.name}
-                className="w-full h-48 object-cover rounded-t-lg"
-              />
-            </div>
-            <CardContent className="p-4">
-              <h3 className={`${getThemeClasses().text} font-bold text-lg mb-1`}>{bird.name}</h3>
-              <p className="text-gray-400 italic text-sm mb-2">{bird.scientificName}</p>
-              <p className="text-gray-300 text-sm mb-3">{bird.description}</p>
-
-              <div className="space-y-2 mb-4">
-                <div>
-                  <span className="text-blue-400 text-xs font-medium">HÁBITAT:</span>
-                  <p className="text-gray-300 text-xs">{bird.habitat}</p>
-                </div>
-                <div>
-                  <span className="text-green-400 text-xs font-medium">MEJOR MOMENTO:</span>
-                  <p className="text-gray-300 text-xs">{bird.bestTime}</p>
-                </div>
-              </div>
-
-              <div className="flex gap-2">
-                <Button
-                  size="sm"
-                  onClick={() => handleBirdSelect(bird)}
-                  className="flex-1 bg-blue-600 hover:bg-blue-700"
-                  onFocus={() => speakText(`Botón escuchar información de ${bird.name}`)}
-                >
-                  <Volume2 className="h-4 w-4 mr-1" />
-                  Escuchar
-                </Button>
-                <Button
-                  size="sm"
-                  variant="outline"
-                  className="border-slate-600 text-white hover:bg-slate-700 bg-transparent"
-                  onClick={() => playAudio(bird.sound)}
-                >
-                  🎵
-                </Button>
-              </div>
-            </CardContent>
-          </Card>
-        ))}
-      </div>
-
-      {/* Información del ave seleccionada */}
-      {selectedBird && (
-        <Card className={getThemeClasses().card}>
-          <CardHeader>
-            <CardTitle className={`${getThemeClasses().text} flex items-center gap-2`}>
-              <Headphones className="h-5 w-5" />
-              {selectedBird.name}
-            </CardTitle>
-            <CardDescription className={getThemeClasses().textSecondary}>{selectedBird.scientificName}</CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            <div className={`${getThemeClasses().overlay} p-4 rounded-lg`}>
-              <p className={`${getThemeClasses().text} leading-relaxed`}>{selectedBird.audioDescription}</p>
-            </div>
-
-            <div className="grid md:grid-cols-2 gap-4">
-              <div>
-                <h4 className={`${getThemeClasses().text} font-medium mb-2`}>Información adicional:</h4>
-                <ul className="text-gray-300 text-sm space-y-1">
-                  <li>
-                    <strong>Hábitat:</strong> {selectedBird.habitat}
-                  </li>
-                  <li>
-                    <strong>Mejor momento para observar:</strong> {selectedBird.bestTime}
-                  </li>
-                  <li>
-                    <strong>Sonido:</strong> {selectedBird.sound}
-                  </li>
-                </ul>
-              </div>
-              <div className="flex items-center justify-center">
-                <Button
-                  onClick={() => speakText(selectedBird.audioDescription)}
-                  className="bg-green-600 hover:bg-green-700"
-                >
-                  <Play className="h-4 w-4 mr-2" />
-                  Reproducir descripción
-                </Button>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-      )}
-    </div>
-  )
-
   const renderHome = () => (
-    <div className="space-y-6">
-      <div className="text-center space-y-4">
-        <h1 className={`text-4xl md:text-6xl font-bold ${getThemeClasses().text} mb-4`}>Guía Turística Accesible</h1>
-        <h2 className={`text-2xl md:text-3xl ${isDarkMode ? "text-blue-200" : "text-blue-600"} mb-8`}>Isla Isabela</h2>
-        <p className={`text-lg ${getThemeClasses().textSecondary} max-w-2xl mx-auto`}>
+    <div className="space-y-10">
+      <div className="text-center space-y-6">
+        <h1 className={`text-5xl md:text-7xl font-extrabold tracking-tight leading-tight ${getThemeClasses().text} drop-shadow-lg`}>
+          Guía Turística Accesible
+        </h1>
+        <h2 className={`text-3xl md:text-4xl font-semibold ${isDarkMode ? "text-blue-300" : "text-blue-700"} tracking-wide`}>
+          Isla Isabela
+        </h2>
+        <p className={`text-xl max-w-3xl mx-auto leading-relaxed ${getThemeClasses().textSecondary} tracking-wide`}>
           Descubre los lugares más hermosos de la Isla Isabela con nuestra guía completamente accesible
         </p>
       </div>
 
-      <div className="grid gap-4 md:gap-6">
-        <Card className={`${getThemeClasses().card} ${getThemeClasses().cardHover} transition-colors`}>
+      <div className="grid gap-8 md:grid-cols-2">
+        <Card className={`${getThemeClasses().card} ${getThemeClasses().cardHover} transition-transform hover:scale-[1.05] shadow-lg`}>
           <CardHeader>
-            <CardTitle className={`${getThemeClasses().text} flex items-center gap-2`}>
-              <Volume2 className="h-5 w-5" />
+            <CardTitle className={`${getThemeClasses().text} flex items-center gap-3 font-semibold text-xl`}>
+              <Volume2 className="h-6 w-6" />
               Iniciar Recorrido
             </CardTitle>
-            <CardDescription className={getThemeClasses().textSecondary}>
+            <CardDescription className={`${getThemeClasses().textSecondary} text-base font-light`}>
               Comienza tu experiencia auditiva por la Isla Isabela
             </CardDescription>
           </CardHeader>
           <CardContent>
             <Button
               onClick={() => setCurrentSection("explore")}
-              className="w-full bg-blue-600 hover:bg-blue-700"
+              className="w-full bg-gradient-to-r from-blue-600 to-blue-500 hover:from-blue-700 hover:to-blue-600 shadow-lg text-lg font-semibold py-3"
               onFocus={() => speakText("Botón iniciar recorrido")}
             >
               Comenzar Exploración
             </Button>
           </CardContent>
         </Card>
-        <Card className={`${getThemeClasses().card} ${getThemeClasses().cardHover} transition-colors`}>
+        <Card className={`${getThemeClasses().card} ${getThemeClasses().cardHover} transition-transform hover:scale-[1.05] shadow-lg`}>
           <CardHeader>
-            <CardTitle className={`${getThemeClasses().text} flex items-center gap-2`}>
-              <Headphones className="h-5 w-5" />
+            <CardTitle className={`${getThemeClasses().text} flex items-center gap-3 font-semibold text-xl`}>
+              <Headphones className="h-6 w-6" />
               Explorar Aves
             </CardTitle>
-            <CardDescription className={getThemeClasses().textSecondary}>
+            <CardDescription className={`${getThemeClasses().textSecondary} text-base font-light`}>
               Descubre la diversidad de aves en la Isla Isabela
             </CardDescription>
           </CardHeader>
           <CardContent>
             <Button
               onClick={() => setCurrentSection("birds")}
-              className="w-full bg-green-600 hover:bg-green-700"
+              className="w-full bg-gradient-to-r from-green-600 to-green-500 hover:from-green-700 hover:to-green-600 shadow-lg text-lg font-semibold py-3"
               onFocus={() => speakText("Botón explorar aves")}
             >
               Ver Aves
@@ -397,37 +224,47 @@ export default function HomeScreen() {
   )
 
   const renderInfo = () => (
-    <div className="space-y-6">
-      <h2 className={`${getThemeClasses().text} text-3xl font-bold mb-6`}>Información General</h2>
-      <p className={`${getThemeClasses().textSecondary} text-lg max-w-2xl mx-auto`}>
-        Galápagos es un archipiélago ubicado en el Pacífico Sur de Ecuador, conocido por su biodiversidad única y su
-        papel en la teoría de la evolución.
-      </p>
+    <div className="space-y-10 max-w-4xl mx-auto">
+      <h2 className={`${getThemeClasses().text} text-4xl font-extrabold mb-8 tracking-wide drop-shadow-md`}>Información General</h2>
+      <div className={`${getThemeClasses().textSecondary} text-lg leading-relaxed space-y-6`}>
+        <p>
+          Las Islas Galápagos, ubicadas en el Océano Pacífico a unos 1000 km de la costa de Ecuador, son un archipiélago reconocido mundialmente por su biodiversidad única y su importancia en el desarrollo de la teoría de la evolución de Charles Darwin.
+        </p>
+        <p>
+          Isla Isabela es la más grande del archipiélago y ofrece una combinación excepcional de ecosistemas, incluyendo volcanes activos, playas vírgenes y una increíble variedad de flora y fauna. Esta isla es hogar de especies emblemáticas como la tortuga gigante, pingüinos de Galápagos y una gran diversidad de aves endémicas.
+        </p>
+        <p>
+          Nuestra guía turística inclusiva está especialmente diseñada para personas no videntes y con otras discapacidades visuales, proporcionando descripciones auditivas detalladas, navegación por teclado y contenido accesible para que todos puedan disfrutar y conocer la riqueza natural y cultural de Isla Isabela.
+        </p>
+        <p>
+          Te invitamos a explorar sus paisajes, aprender sobre su historia, y descubrir los secretos de este paraíso ecológico, con la tranquilidad de contar con una experiencia accesible y enriquecedora.
+        </p>
+      </div>
     </div>
   )
 
   const renderAudioTour = () => (
-    <div className="space-y-6">
-      <h2 className={`${getThemeClasses().text} text-3xl font-bold mb-6`}>Audio Tour</h2>
-      <p className={`${getThemeClasses().textSecondary} text-lg max-w-2xl mx-auto`}>
+    <div className="space-y-8 max-w-3xl mx-auto">
+      <h2 className={`${getThemeClasses().text} text-4xl font-extrabold mb-8 tracking-wide drop-shadow-md`}>Audio Tour</h2>
+      <p className={`${getThemeClasses().textSecondary} text-lg leading-relaxed mb-6`}>
         Disfruta de una guía auditiva de las Islas Galápagos.
       </p>
       {selectedLocation && (
-        <div className="space-y-4">
-          <div className={`${getThemeClasses().overlay} p-4 rounded-lg`}>
-            <p className={`${getThemeClasses().text} leading-relaxed`}>{selectedLocation.audioDescription}</p>
+        <div className="space-y-6">
+          <div className={`${getThemeClasses().overlay} p-6 rounded-2xl shadow-lg border border-blue-500`}>
+            <p className={`${getThemeClasses().text} text-lg leading-relaxed`}>{selectedLocation.audioDescription}</p>
           </div>
-          <div className="flex gap-2">
-            <Button onClick={togglePlayPause} className="bg-blue-600 hover:bg-blue-700">
-              {isPlaying ? <Pause className="h-4 w-4 mr-2" /> : <Play className="h-4 w-4 mr-2" />}
+          <div className="flex gap-4 justify-center flex-wrap">
+            <Button onClick={togglePlayPause} className="bg-gradient-to-r from-blue-600 to-blue-500 hover:from-blue-700 hover:to-blue-600 shadow-md px-6 py-3 text-lg font-semibold">
+              {isPlaying ? <Pause className="h-5 w-5 mr-3" /> : <Play className="h-5 w-5 mr-3" />}
               {isPlaying ? "Detener" : "Reproducir"}
             </Button>
-            <Button onClick={repeatAudio} className="bg-green-600 hover:bg-green-700">
-              <RotateCcw className="h-4 w-4 mr-2" />
+            <Button onClick={repeatAudio} className="bg-gradient-to-r from-green-600 to-green-500 hover:from-green-700 hover:to-green-600 shadow-md px-6 py-3 text-lg font-semibold">
+              <RotateCcw className="h-5 w-5 mr-3" />
               Repetir
             </Button>
-            <Button onClick={toggleMute} className="bg-red-600 hover:bg-red-700">
-              {isMuted ? <VolumeX className="h-4 w-4 mr-2" /> : <Volume2 className="h-4 w-4 mr-2" />}
+            <Button onClick={toggleMute} className="bg-gradient-to-r from-red-600 to-red-500 hover:from-red-700 hover:to-red-600 shadow-md px-6 py-3 text-lg font-semibold">
+              {isMuted ? <VolumeX className="h-5 w-5 mr-3" /> : <Volume2 className="h-5 w-5 mr-3" />}
               {isMuted ? "Desactivar silencio" : "Activar silencio"}
             </Button>
           </div>
@@ -435,98 +272,111 @@ export default function HomeScreen() {
       )}
     </div>
   )
+  useEffect(() => {
+    if (currentSection === "info") {
+      const infoText = `
+        Las Islas Galápagos, ubicadas en el Océano Pacífico a unos 1000 km de la costa de Ecuador, 
+        son un archipiélago reconocido mundialmente por su biodiversidad única y su importancia en 
+        el desarrollo de la teoría de la evolución de Charles Darwin. Isla Isabela es la más grande 
+        del archipiélago y ofrece una combinación excepcional de ecosistemas, incluyendo volcanes 
+        activos, playas vírgenes y una increíble variedad de flora y fauna. Esta isla es hogar de 
+        especies emblemáticas como la tortuga gigante, pingüinos de Galápagos y una gran diversidad 
+        de aves endémicas. Nuestra guía turística inclusiva está especialmente diseñada para personas 
+        no videntes y con otras discapacidades visuales, proporcionando descripciones auditivas detalladas, 
+        navegación por teclado y contenido accesible para que todos puedan disfrutar y conocer la riqueza 
+        natural y cultural de Isla Isabela. Te invitamos a explorar sus paisajes, aprender sobre su historia, 
+        y descubrir los secretos de este paraíso ecológico, con la tranquilidad de contar con una experiencia 
+        accesible y enriquecedora.
+      `
+      speakText(infoText.trim())
+    }
+  }, [currentSection])
 
   return (
-    <div className={`min-h-screen ${getThemeClasses().background}`}>
+    <div className={`min-h-screen ${getThemeClasses().background} transition-colors duration-500`}>
       {/* Navigation */}
       <nav
-        className={`${getThemeClasses().nav} backdrop-blur-sm border-b ${getThemeClasses().border} sticky top-0 z-50`}
+        className={`${getThemeClasses().nav} backdrop-blur-lg border-b border-blue-600/40 sticky top-0 z-50 shadow-md`}
       >
-        <div className="container mx-auto px-4 py-4">
+        <div className="container mx-auto px-6 py-5">
           <div className="flex justify-center">
-            <div className="flex gap-2 md:gap-4">
+            <div className="flex gap-4 md:gap-6">
               <Button
                 variant={currentSection === "home" ? "default" : "ghost"}
                 onClick={() => setCurrentSection("home")}
-                className={`${getThemeClasses().text} hover:bg-slate-700`}
+                className={`${getThemeClasses().text} hover:bg-blue-700 rounded-lg shadow-lg transition`}
                 onFocus={() => speakText("Navegación: Inicio")}
               >
-                <Home className="h-4 w-4 mr-2" />
-                <span className="hidden sm:inline">Inicio</span>
+                <Home className="h-5 w-5 mr-2" />
+                <span className="hidden sm:inline font-semibold">Inicio</span>
               </Button>
               <Button
                 variant={currentSection === "info" ? "default" : "ghost"}
                 onClick={() => setCurrentSection("info")}
-                className={`${getThemeClasses().text} hover:bg-slate-700`}
+                className={`${getThemeClasses().text} hover:bg-blue-700 rounded-lg shadow-lg transition`}
                 onFocus={() => speakText("Navegación: Información")}
               >
-                <Info className="h-4 w-4 mr-2" />
-                <span className="hidden sm:inline">Información</span>
+                <Info className="h-5 w-5 mr-2" />
+                <span className="hidden sm:inline font-semibold">Información</span>
               </Button>
               <Button
                 variant={currentSection === "explore" ? "default" : "ghost"}
                 onClick={() => setCurrentSection("explore")}
-                className={`${getThemeClasses().text} hover:bg-slate-700`}
+                className={`${getThemeClasses().text} hover:bg-blue-700 rounded-lg shadow-lg transition`}
                 onFocus={() => speakText("Navegación: Explorar")}
               >
-                <Map className="h-4 w-4 mr-2" />
-                <span className="hidden sm:inline">Explorar</span>
+                <Map className="h-5 w-5 mr-2" />
+                <span className="hidden sm:inline font-semibold">Explorar</span>
               </Button>
               {selectedLocation && (
                 <Button
                   variant={currentSection === "audio" ? "default" : "ghost"}
                   onClick={() => setCurrentSection("audio")}
-                  className={`${getThemeClasses().text} hover:bg-slate-700`}
+                  className={`${getThemeClasses().text} hover:bg-blue-700 rounded-lg shadow-lg transition`}
                   onFocus={() => speakText("Navegación: Audio Tour")}
                 >
-                  <Headphones className="h-4 w-4 mr-2" />
-                  <span className="hidden sm:inline">Audio Tour</span>
+                  <Headphones className="h-5 w-5 mr-2" />
+                  <span className="hidden sm:inline font-semibold">Audio Tour</span>
                 </Button>
               )}
-              {/* En la sección de navegación, agregar: */}
               <Button
                 variant={currentSection === "birds" ? "default" : "ghost"}
                 onClick={() => setCurrentSection("birds")}
-                className={`${getThemeClasses().text} hover:bg-slate-700`}
+                className={`${getThemeClasses().text} hover:bg-blue-700 rounded-lg shadow-lg transition`}
                 onFocus={() => speakText("Navegación: Aves")}
               >
                 <span className="text-lg mr-2">🦅</span>
-                <span className="hidden sm:inline">Aves</span>
+                <span className="hidden sm:inline font-semibold">Aves</span>
               </Button>
               <Button
                 variant="ghost"
                 onClick={toggleTheme}
-                className={`${getThemeClasses().text} hover:bg-slate-700 ${isDarkMode ? "hover:bg-slate-700" : "hover:bg-gray-100"}`}
-                onFocus={() => speakText("Botón cambiar tema")}
-                aria-label={isDarkMode ? "Cambiar a tema claro" : "Cambiar a tema oscuro"}
+                aria-label="Cambiar tema claro/oscuro"
+                className={`${getThemeClasses().text} hover:bg-blue-700 rounded-lg shadow-lg transition flex items-center justify-center`}
               >
-                {isDarkMode ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
-                <span className="hidden sm:inline ml-2">{isDarkMode ? "Claro" : "Oscuro"}</span>
+                {isDarkMode ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
               </Button>
             </div>
           </div>
         </div>
       </nav>
 
-      {/* Main Content */}
-      <main className="container mx-auto px-4 py-8">
+      {/* Main content */}
+      <main className="container mx-auto px-6 py-10">
         {currentSection === "home" && renderHome()}
         {currentSection === "info" && renderInfo()}
         {currentSection === "explore" && renderExplore()}
         {currentSection === "audio" && renderAudioTour()}
-        {/* En el main content, agregar: */}
-        {currentSection === "birds" && renderBirds()}
+        {currentSection === "birds" &&
+          <BirdsSection
+            birdSpecies={birdSpecies}
+            selectedBird={selectedBird}
+            handleBirdSelect={handleBirdSelect}
+            speakText={speakText}
+            getThemeClasses={getThemeClasses}
+            isDarkMode={isDarkMode}
+          />}
       </main>
-
-      {/* Screen reader announcements */}
-      <div aria-live="polite" aria-atomic="true" className="sr-only">
-        {currentSection === "home" && "Página de inicio cargada"}
-        {currentSection === "info" && "Página de información cargada"}
-        {currentSection === "explore" && "Página de exploración cargada"}
-        {currentSection === "audio" && "Modo audio tour activado"}
-        {/* Actualizar los anuncios para lectores de pantalla: */}
-        {currentSection === "birds" && "Página de aves cargada"}
-      </div>
     </div>
   )
 }
