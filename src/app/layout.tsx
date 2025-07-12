@@ -27,9 +27,9 @@ export const metadata: Metadata = {
     'turismo accesible'
   ],
   icons: {
-    icon: '/images/tortoise.ico',
+    icon: '/favicon.ico',
   },
-  authors: [{ name: 'Alexander Tasinchano' }],
+  authors: [{ name: 'Alexander Tasinchano Tite', url: 'https://portafolio-web-sable-eight.vercel.app/' }, { name: 'Alexander Tasinchano Tite', url: 'https://www.linkedin.com/in/alexander-tasinchano-tite-b75088274/' }],
   robots: 'index, follow',
   openGraph: {
     title: 'Guía Inclusiva de Isabela, Galápagos',
@@ -45,7 +45,11 @@ export const metadata: Metadata = {
       },
     ],
     locale: 'es_EC',
-    type: 'website',
+    type: 'article',
+    publishedTime: '2025-07-11T12:00:00Z',
+    modifiedTime: '2025-07-12T15:30:00Z',
+    tags: ['Guía turística', 'Isabela', 'turismo inclusivo'],
+    authors: ['https://portafolio-web-sable-eight.vercel.app/', 'https://www.linkedin.com/in/alexander-tasinchano-tite-b75088274/'],
   },
   other: {
     'google-site-verification': 'vHIzuFR42_8-BkNGQSs0buGLpfEmZKxiuaPRV2YPXss',
@@ -59,7 +63,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="es">
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
