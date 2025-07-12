@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from "react"
+import { useState, useRef } from "react"
 import { AudioLocation, BirdSpecies } from "../types"
 import { locations, birdSpecies } from "../data"
 
@@ -10,7 +10,9 @@ export const useGuide = () => {
   const [isMuted, setIsMuted] = useState(false)
   const [autoDescriptionEnabled, setAutoDescriptionEnabled] = useState(true)
   const audioRef = useRef<HTMLAudioElement>(null)
-  const [isDarkMode, setIsDarkMode] = useState(true)
+
+  // Cambiar el modo oscuro a false por defecto
+  const [isDarkMode, setIsDarkMode] = useState(false)
 
   // Función para leer texto con Web Speech API
   const speakText = (text: string) => {
@@ -23,7 +25,6 @@ export const useGuide = () => {
     }
   }
 
-  // Función para detener la síntesis de voz
   const stopSpeaking = () => {
     if ("speechSynthesis" in window) {
       window.speechSynthesis.cancel()
@@ -74,36 +75,36 @@ export const useGuide = () => {
     setIsDarkMode(!isDarkMode)
     speakText(isDarkMode ? "Cambiando a tema claro" : "Cambiando a tema oscuro")
   }
-
   const getThemeClasses = () => {
     if (isDarkMode) {
       return {
-        background: "bg-gradient-to-br from-slate-900 via-blue-900 to-slate-900",
-        nav: "bg-slate-800/80",
-        card: "bg-slate-800/50 border-slate-700",
-        cardHover: "hover:bg-slate-700/50",
-        text: "text-white",
-        textSecondary: "text-gray-300",
-        textMuted: "text-gray-400",
-        border: "border-slate-700",
-        button: "bg-blue-600 hover:bg-blue-700",
-        overlay: "bg-slate-700/50",
+        background: "bg-gradient-to-br from-[#004D40] via-[#002F2F] to-[#001A1A]",
+        nav: "bg-[#002F2F]/80 border-[#004D40]",
+        card: "bg-[#002F2F]/90 border-[#004D40] shadow-md rounded-lg",
+        cardHover: "hover:bg-[#004D40]/90",
+        text: "text-[#E0F2F1]",
+        textSecondary: "text-[#4DB6AC]",
+        textMuted: "text-[#80CBC4]",
+        border: "border-[#004D40]",
+        button: "bg-[#4DB6AC] hover:bg-[#00796B]",
+        overlay: "bg-[#002F2F]/50",
       }
     } else {
       return {
-        background: "bg-gradient-to-br from-blue-50 via-white to-blue-100",
-        nav: "bg-white/90 border-gray-200",
-        card: "bg-white/80 border-gray-200 shadow-lg",
-        cardHover: "hover:bg-gray-50",
-        text: "text-gray-900",
-        textSecondary: "text-gray-700",
-        textMuted: "text-gray-500",
-        border: "border-gray-200",
-        button: "bg-blue-500 hover:bg-blue-600",
-        overlay: "bg-gray-100/50",
+        background: "bg-gradient-to-br from-[#E3F2FD] via-[#FFFFFF] to-[#F1F8E9]",
+        nav: "bg-white/90 border-[#B0BEC5]",
+        card: "bg-white/90 border-[#B0BEC5] shadow-md rounded-lg",
+        cardHover: "hover:bg-[#E0F7FA]",
+        text: "text-[#1A237E]",
+        textSecondary: "text-[#5C6BC0]",
+        textMuted: "text-[#90A4AE]",
+        border: "border-[#B0BEC5]",
+        button: "bg-[#26A69A] hover:bg-[#00796B]",
+        overlay: "bg-[#B2DFDB]/50",
       }
     }
   }
+
 
   return {
     currentSection,
@@ -122,20 +123,8 @@ export const useGuide = () => {
     toggleMute,
     toggleTheme,
     getThemeClasses,
-    speakText: (text: string) => {
-      if ("speechSynthesis" in window && autoDescriptionEnabled) {
-        window.speechSynthesis.cancel()
-        const utterance = new SpeechSynthesisUtterance(text)
-        utterance.lang = "es-ES"
-        utterance.rate = 0.8
-        window.speechSynthesis.speak(utterance)
-      }
-    },
-    stopSpeaking: () => {
-      if ("speechSynthesis" in window) {
-        window.speechSynthesis.cancel()
-      }
-    },
-    isDarkMode
+    speakText,
+    stopSpeaking,
+    isDarkMode,
   }
 }
