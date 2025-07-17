@@ -6,6 +6,7 @@ import { Button } from "./ui/button"
 import { playAudio } from "../lib/utils"
 import { Bird } from "../hooks/useGuide"
 import { BirdSpecies } from "../types"
+import { motion, AnimatePresence } from "framer-motion"
 
 
 interface BirdsSectionProps {
@@ -37,7 +38,7 @@ export default function BirdsSection({
             {/* Lista de aves */}
             <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
                 {birdSpecies.map((bird) => (
-                    <Card key={bird.id} className={`${getThemeClasses().card} ${getThemeClasses().cardHover} transition-colors`}>
+                    <Card key={bird.id} className={`${getThemeClasses().card} ${getThemeClasses().cardHover}  transition-all duration-300 hover:scale-[1.02] hover:shadow-xl`}>
                         <div className="relative w-full aspect-[4/3]">
                             <img
                                 src={bird.image || "/placeholder.svg"}
@@ -87,47 +88,57 @@ export default function BirdsSection({
 
             {/* Información del ave seleccionada */}
             {selectedBird && (
-                <Card className={getThemeClasses().card}>
-                    <CardHeader>
-                        <CardTitle className={`${getThemeClasses().text} flex items-center gap-2`}>
-                            <Headphones className="h-5 w-5" />
-                            {selectedBird.name}
-                        </CardTitle>
-                        <CardDescription className={getThemeClasses().textSecondary}>{selectedBird.scientificName}</CardDescription>
-                    </CardHeader>
-                    <CardContent className="space-y-4">
-                        <div className={`${getThemeClasses().overlay} p-4 rounded-lg`}>
-                            <p className={`${getThemeClasses().text} leading-relaxed`}>{selectedBird.audioDescription}</p>
-                        </div>
+                <motion.div
+                    key={selectedBird.id}
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -20 }}
+                    transition={{ duration: 0.4 }}
+                >
 
-                        <div className="grid md:grid-cols-2 gap-4">
-                            <div>
-                                <h4 className={`${getThemeClasses().text} font-medium mb-2`}>Información adicional:</h4>
-                                <ul className="text-gray-300 text-sm space-y-1">
-                                    <li>
-                                        <strong>Hábitat:</strong> {selectedBird.habitat}
-                                    </li>
-                                    <li>
-                                        <strong>Mejor momento para observar:</strong> {selectedBird.bestTime}
-                                    </li>
-                                    <li>
-                                        <strong>Sonido:</strong> {selectedBird.sound}
-                                    </li>
-                                </ul>
+                    <Card className={getThemeClasses().card}>
+                        <CardHeader>
+                            <CardTitle className={`${getThemeClasses().text} flex items-center gap-2`}>
+                                <Headphones className="h-5 w-5" />
+                                {selectedBird.name}
+                            </CardTitle>
+                            <CardDescription className={getThemeClasses().textSecondary}>{selectedBird.scientificName}</CardDescription>
+                        </CardHeader>
+                        <CardContent className="space-y-4">
+                            <div className={`${getThemeClasses().overlay} p-4 rounded-lg`}>
+                                <p className={`${getThemeClasses().text} leading-relaxed`}>{selectedBird.audioDescription}</p>
                             </div>
-                            <div className="flex items-center justify-center">
-                                <Button
-                                    onClick={() => speakText(selectedBird.audioDescription || "")}
-                                    className="bg-green-600 hover:bg-green-700"
-                                >
-                                    <Play className="h-4 w-4 mr-2" />
-                                    Escuchar descripción
-                                </Button>
+
+                            <div className="grid md:grid-cols-2 gap-4">
+                                <div>
+                                    <h4 className={`${getThemeClasses().text} font-medium mb-2`}>Información adicional:</h4>
+                                    <ul className="text-gray-300 text-sm space-y-1">
+                                        <li>
+                                            <strong>Hábitat:</strong> {selectedBird.habitat}
+                                        </li>
+                                        <li>
+                                            <strong>Mejor momento para observar:</strong> {selectedBird.bestTime}
+                                        </li>
+                                        <li>
+                                            <strong>Sonido:</strong> {selectedBird.sound}
+                                        </li>
+                                    </ul>
+                                </div>
+                                <div className="flex items-center justify-center">
+                                    <Button
+                                        onClick={() => speakText(selectedBird.audioDescription || "")}
+                                        className="bg-green-600 hover:bg-green-700"
+                                    >
+                                        <Play className="h-4 w-4 mr-2" />
+                                        Escuchar descripción
+                                    </Button>
+                                </div>
                             </div>
-                        </div>
-                    </CardContent>
-                </Card>
-            )}
-        </div>
+                        </CardContent>
+                    </Card>
+                </motion.div>
+            )
+            }
+        </div >
     )
 }

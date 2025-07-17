@@ -6,6 +6,7 @@ import { Badge } from "./components/ui/badge";
 import { Button } from "./components/ui/button";
 import BirdsSection from "./components/BirdsSection";
 import { useEffect } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 
 export default function HomeScreen() {
   const {
@@ -363,19 +364,69 @@ export default function HomeScreen() {
 
       {/* Main content */}
       <main className="container mx-auto px-6 py-10">
-        {currentSection === "home" && renderHome()}
-        {currentSection === "info" && renderInfo()}
-        {currentSection === "explore" && renderExplore()}
-        {currentSection === "audio" && renderAudioTour()}
-        {currentSection === "birds" &&
-          <BirdsSection
-            birdSpecies={birdSpecies}
-            selectedBird={selectedBird}
-            handleBirdSelect={handleBirdSelect}
-            speakText={speakText}
-            getThemeClasses={getThemeClasses}
-            isDarkMode={isDarkMode}
-          />}
+        {currentSection === "home" && (
+          <motion.div
+            key="home"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -20 }}
+            transition={{ duration: 0.4 }}
+          >
+            {renderHome()}
+          </motion.div>
+        )}
+        {currentSection === "info" &&
+          (
+            <motion.div
+              key="info"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -20 }}
+              transition={{ duration: 0.4 }}
+            >
+              {renderInfo()}
+            </motion.div>
+          )}
+        {currentSection === "explore" && (
+          <motion.div
+            key="explore"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -20 }}
+            transition={{ duration: 0.4 }}
+          >
+            {renderExplore()}
+          </motion.div>
+        )}
+        {currentSection === "audio" && (
+          <motion.div
+            key="audio"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -20 }}
+            transition={{ duration: 0.4 }}
+          >
+            {renderAudioTour()}
+          </motion.div>
+        )}
+        {currentSection === "birds" && (
+          <motion.div
+            key="birds"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -20 }}
+            transition={{ duration: 0.4 }}
+          >
+            <BirdsSection
+              birdSpecies={birdSpecies}
+              selectedBird={selectedBird}
+              handleBirdSelect={handleBirdSelect}
+              speakText={speakText}
+              getThemeClasses={getThemeClasses}
+              isDarkMode={isDarkMode}
+            />
+          </motion.div>
+        )}
       </main>
     </div>
   )
