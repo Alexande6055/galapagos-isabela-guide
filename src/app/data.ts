@@ -13,6 +13,43 @@ export const locations: AudioLocation[] = [
     image: "https://img.goraymi.com/2020/12/16/6dfb84125b8f21def3146f1bc4d75be8_xl.jpg"
   },
   {
+    id: "volcan-sierra-negra",
+    name: "Volcán Sierra Negra",
+    description: "Uno de los volcanes más activos y accesibles de Galápagos, con una de las calderas más grandes del mundo.",
+    audioDescription: `
+    Has llegado al Volcán Sierra Negra, ubicado al sureste de la isla Isabela. Este majestuoso volcán 
+    tiene una caldera de casi 10 kilómetros de diámetro, una de las más grandes del planeta. Desde aquí 
+    podrás escuchar el viento atravesando el cráter y observar un paisaje volcánico único que combina 
+    roca negra, vegetación nativa y formaciones de lava recientes. El volcán ha tenido erupciones 
+    en los últimos años, siendo la más reciente en 2018. Su acceso es posible mediante una caminata o 
+    cabalgata guiada de aproximadamente 9 kilómetros desde Santo Tomás. Es un sitio ideal para conocer 
+    la fuerza geológica que dio origen a Galápagos. El recorrido está adaptado con descansos, señalización 
+    y la posibilidad de audio guía en distintos idiomas.
+  `,
+    coordinates: { x: 48, y: 41 },
+    accessibility: ["Cabalgata guiada", "Señalización informativa", "Áreas de descanso", "Guía en audio disponible"],
+    type: "location",
+    image: "/images/volcan_sierra_negra.jpg"
+  }, {
+    id: "avistamiento-aves",
+    name: "Mirador de Aves",
+    description: "Punto ideal para observar aves endémicas y migratorias de Galápagos en su hábitat natural.",
+    audioDescription: `
+    Estás en uno de los mejores lugares para el avistamiento de aves en la isla Isabela. Aquí, entre 
+    manglares, humedales y lagunas costeras, es posible observar especies únicas como los flamencos 
+    rosados, patillos, zarapitos, gallaretas y varias especies de pinzones de Darwin. Muchas de estas 
+    aves son endémicas de Galápagos, lo que significa que no se encuentran en ningún otro lugar del mundo. 
+    Escucha con atención el canto de los pinzones, el chapoteo de los patos y el aleteo de garzas 
+    sobrevolando el humedal. Este entorno es muy delicado, por lo que se recomienda mantener silencio 
+    y no salirse del sendero. Hay zonas con señalización interpretativa y torres de observación adaptadas.
+  `,
+    coordinates: { x: 25, y: 65 },
+    accessibility: ["Senderos señalizados", "Torre de observación", "Paneles informativos", "Zona de descanso"],
+    type: "location",
+    image: "/images/avistamiento_aves.jpg"
+  }
+  ,
+  {
     id: "playa-amor",
     name: "Playa del Amor",
     description: "Hermosa playa con arena blanca y aguas cristalinas",
